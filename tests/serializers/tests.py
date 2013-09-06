@@ -440,6 +440,17 @@ class JsonSerializerTransactionTestCase(SerializersTransactionTestBase, Transact
     }]"""
 
 
+@unittest.skipIf(HAS_YAML, "Yaml is installed")
+class NoYamlSerializerTestCase(TestCase):
+    """Not having pyyaml installed provides a misleading error
+
+    #12756
+    """
+    def test_missing_pyyaml_error_message(self):
+        jane = Author(name="Jane")
+        self.assertRaises(ImportError, serializers.serialize, "yaml", [jane])
+
+
 @unittest.skipUnless(HAS_YAML, "No yaml library detected")
 class YamlSerializerTestCase(SerializersTestBase, TestCase):
     serializer_name = "yaml"
